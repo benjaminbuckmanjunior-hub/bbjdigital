@@ -1,0 +1,14 @@
+# Project level gitignore
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+*.log
+.env
+.env.local
+node_modules/
+target/
+dist/
+build/

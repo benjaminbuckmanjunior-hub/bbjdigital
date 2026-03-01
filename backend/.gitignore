@@ -1,0 +1,13 @@
+# Backend gitignore
+.classpath
+.project
+.settings/
+target/
+.idea/
+*.iml
+*.jar
+*.class
+*.log
+*.properties
+.DS_Store
+.vscode/
