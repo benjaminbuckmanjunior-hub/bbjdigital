@@ -1,0 +1,22 @@
+# Netlify Configuration - Frontend Deployment
+[build]
+  command = "cd frontend && npm install && npm run build"
+  publish = "frontend/build"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[dev]
+  command = "cd frontend && npm start"
+  port = 3000
+
+[env.production]
+  [env.production.build.environment]
+    REACT_APP_API_URL = "https://bbj-church-backend.onrender.com/api"
+    REACT_APP_ENVIRONMENT = "production"
+    REACT_APP_FILE_UPLOAD_ENDPOINT = "/api/sermons/upload"
+    REACT_APP_B2_KEY_ID = "0055be753f9e33f0000000001"
+    REACT_APP_B2_KEY_NAME = "Project"
+    REACT_APP_B2_BUCKET_NAME = "bbj1532"
