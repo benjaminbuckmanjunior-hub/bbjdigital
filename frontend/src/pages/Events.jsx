@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { getEvents } from '../services/api';
 import Layout from '../layouts/Layout';
 
@@ -43,3 +43,4 @@ export default function Events() {
         </Layout>
     );
 }
+

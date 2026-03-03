@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+﻿import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
     getMembers, deleteMember,
@@ -150,10 +150,10 @@ export default function AdminDashboard() {
 
             {/* Tab Navigation */}
             <div className="flex flex-wrap gap-2 bg-white p-4 rounded-lg shadow">
-                <TabButton tab="members" label="Members" icon="👥" />
-                <TabButton tab="announcements" label="Announcements" icon="📢" />
-                <TabButton tab="events" label="Events" icon="📅" />
-                <TabButton tab="sermons" label="Sermons" icon="🎵" />
+                <TabButton tab="members" label="Members" icon="ðŸ'¥" />
+                <TabButton tab="announcements" label="Announcements" icon="ðŸ"¢" />
+                <TabButton tab="events" label="Events" icon="ðŸ"…" />
+                <TabButton tab="sermons" label="Sermons" icon="ðŸŽµ" />
             </div>
 
             {/* Loading State */}
@@ -353,3 +353,4 @@ export default function AdminDashboard() {
         </div>
     );
 }
+

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+﻿import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { register } from '../services/api';
 import Layout from '../layouts/Layout';
@@ -120,3 +120,4 @@ export default function Register() {
         </Layout>
     );
 }
+

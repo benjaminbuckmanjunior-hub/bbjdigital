@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+﻿import { useEffect, useState } from 'react';
 import { getSermons } from '../services/api';
 import Layout from '../layouts/Layout';
 
@@ -56,3 +56,4 @@ export default function Sermons() {
         </Layout>
     );
 }
+
