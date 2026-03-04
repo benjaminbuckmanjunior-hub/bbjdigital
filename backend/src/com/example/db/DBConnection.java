@@ -15,9 +15,9 @@ public class DBConnection {
             
             if ("production".equals(env)) {
                 // TiDB Cloud Production
-                url = "jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/bbj?useSSL=true&serverTimezone=UTC";
+                url = "jdbc:mysql://nrMPj1ECajN3NtY.root:6gdgKOspWxVAfCvT@gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/bbj";
                 username = "nrMPj1ECajN3NtY.root";
-                password = "Gt19N5jWU7BMaDl5";
+                password = "6gdgKOspWxVAfCvT";
             } else {
                 // Local Development
                 url = "jdbc:mysql://localhost:1532/bbj?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true";

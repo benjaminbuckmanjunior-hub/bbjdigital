@@ -1,4 +1,4 @@
-﻿# Remove duplicate package declarations from Java files
+# Remove duplicate package declarations from Java files
 
 param(
     [string]$SourceDir = "C:\Users\Buckman\Desktop\BBJ digital\backend\src"

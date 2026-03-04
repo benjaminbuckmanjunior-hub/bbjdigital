@@ -65,7 +65,7 @@ Database: bbj
 Host: gateway01.eu-central-1.prod.aws.tidbcloud.com
 Port: 4000
 Username: nrMPj1ECajN3NtY.root
-Password: Gt19N5jWU7BMaDl5
+Password: 6gdgKOspWxVAfCvT
 Database: bbj
 Connection: Requires useSSL=true
 ```
