@@ -1,78 +1,36 @@
-import { useEffect, useState } from 'react';
-import { getEvents, getAnnouncements } from '../services/api';
-import Layout from '../layouts/Layout';
 
 export default function Home() {
-    const [events, setEvents] = useState([]);
-    const [announcements, setAnnouncements] = useState([]);
-    const [loading, setLoading] = useState(true);
+  return (
+    <div>
+      <section className="bg-primary text-white py-24 text-center">
+        <h1 className="text-5xl font-bold mb-6 animate-pulse">
+          Welcome to BBJ Church
+        </h1>
+        <p className="text-lg mb-8 text-gray-200">
+          Growing in faith. Serving with love.
+        </p>
+        <button className="bg-accent hover:bg-accent-hover text-primary font-bold px-8 py-3 rounded-lg transition">
+          Join Us This Sunday
+        </button>
+      </section>
 
-    useEffect(() => {
-        Promise.all([getEvents(), getAnnouncements()])
-            .then(([eventData, announcementData]) => {
-                setEvents(eventData.slice(0, 3));
-                setAnnouncements(announcementData.slice(0, 3));
-                setLoading(false);
-            })
-            .catch(err => {
-                console.error('Error fetching data:', err);
-                setLoading(false);
-            });
-    }, []);
+      <section className="bg-white py-16 text-center">
+        <h2 className="text-3xl font-bold text-primary mb-6">
+          Our Mission
+        </h2>
+        <p className="max-w-3xl mx-auto text-gray-700">
+          We are committed to building lives, restoring hope, and spreading the love of Christ
+          through impactful worship, community outreach, and spiritual growth.
+        </p>
+      </section>
 
-    if (loading) return <Layout><div className="text-center py-8 text-tealDeep font-semibold">Loading...</div></Layout>;
-
-    return (
-        <Layout>
-            <div className="max-w-5xl mx-auto">
-                <div className="mb-12">
-                    <h1 className="text-5xl font-bold text-tealDeep mb-4">Welcome to BBJ Church Manager</h1>
-                    <p className="text-xl text-gray-700">Stay connected with your church community</p>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-                    <div className="bg-gradient-to-br from-teal-50 to-teal-100 p-8 rounded-lg border-l-4 border-tealDeep shadow-lg">
-                        <h2 className="text-3xl font-bold text-tealDeep mb-4">📅 Upcoming Events</h2>
-                        <div className="space-y-4">
-                            {events.length > 0 ? (
-                                events.map((event, index) => (
-                                    <div key={event.id || index} className="bg-white p-4 rounded-md shadow-md border-l-2 border-lemon hover:shadow-lg transition">
-                                        <h3 className="font-semibold text-tealDeep">{event.eventName}</h3>
-                                        <p className="text-sm text-gray-600">{new Date(event.eventDate).toLocaleDateString()}</p>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-600">No upcoming events.</p>
-                            )}
-                        </div>
-                    </div>
-
-                    <div className="bg-gradient-to-br from-yellow-50 to-yellow-100 p-8 rounded-lg border-l-4 border-lemon shadow-lg">
-                        <h2 className="text-3xl font-bold text-tealDeep mb-4">📢 Recent Announcements</h2>
-                        <div className="space-y-4">
-                            {announcements.length > 0 ? (
-                                announcements.map((announcement, index) => (
-                                    <div key={announcement.id || index} className="bg-white p-4 rounded-md shadow-md border-l-2 border-tealDeep hover:shadow-lg transition">
-                                        <h3 className="font-semibold text-tealDeep">{announcement.title}</h3>
-                                        <p className="text-sm text-gray-600 truncate">{announcement.message}</p>
-                                    </div>
-                                ))
-                            ) : (
-                                <p className="text-gray-600">No announcements.</p>
-                            )}
-                        </div>
-                    </div>
-                </div>
-
-                <div className="bg-gradient-to-r from-tealDeep to-teal-800 text-white p-8 rounded-lg text-center shadow-xl">
-                    <h3 className="text-2xl font-bold mb-2">Get Involved</h3>
-                    <p className="mb-4">Join us for our upcoming events and services</p>
-                    <a href="/events" className="inline-block bg-lemon text-tealDeep font-bold px-6 py-2 rounded hover:bg-yellow-400 transition shadow-md">
-                        View All Events
-                    </a>
-                </div>
-            </div>
-        </Layout>
-    );
+      <section className="bg-accent-soft py-16 text-center">
+        <h2 className="text-3xl font-bold text-primary mb-6">
+          Service Times
+        </h2>
+        <p className="text-lg text-gray-800">Sunday Worship – 9:00 AM</p>
+        <p className="text-lg text-gray-800">Midweek Service – Wednesday 6:00 PM</p>
+      </section>
+    </div>
+  );
 }
-
