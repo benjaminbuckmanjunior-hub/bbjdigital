@@ -8,8 +8,8 @@ WORKDIR /frontend
 # Copy package files
 COPY frontend/package*.json ./
 
-# Install dependencies - use npm ci with force if package-lock doesn't exist
-RUN npm install --legacy-peer-deps --prefer-offline --no-audit || npm install --force --legacy-peer-deps
+# Install dependencies with legacy peer deps support
+RUN npm install --legacy-peer-deps --prefer-offline --no-audit --verbose || npm install --legacy-peer-deps --force --prefer-offline
 
 # Copy source code
 COPY frontend/ .
