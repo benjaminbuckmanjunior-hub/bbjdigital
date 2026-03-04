@@ -1,4 +1,23 @@
-﻿# Multi-stage: Build Spring Boot JAR with integrated React frontend
+﻿# Multi-stage build: Node.js for React, Maven for Spring Boot
+
+# Stage 1: Build React frontend
+FROM node:18-alpine AS node_builder
+
+WORKDIR /frontend
+
+# Copy package files
+COPY frontend/package*.json ./
+
+# Install dependencies
+RUN npm install --legacy-peer-deps
+
+# Copy source code
+COPY frontend/ .
+
+# Build React (output goes to /frontend/build)
+RUN npm run build
+
+# Stage 2: Build Spring Boot JAR with integrated React
 FROM maven:3.9-eclipse-temurin-17 AS maven_builder
 
 WORKDIR /app
@@ -9,26 +28,28 @@ COPY backend/pom.xml .
 # Download dependencies
 RUN mvn dependency:resolve
 
-# Copy source code (includes React build in src/main/resources/static/)
+# Copy backend source
 COPY backend/ .
 
-# Build the JAR with embedded Tomcat and React frontend
+# Copy built React frontend into backend static resources
+COPY --from=node_builder /frontend/build ./src/main/resources/static
+
+# Build the JAR (now includes React frontend)
 RUN mvn clean package -DskipTests
 
-# Runtime stage: Minimal JRE image
+# Stage 3: Runtime
 FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 
-# Copy compiled JAR from builder
+# Copy compiled JAR from Maven builder
 COPY --from=maven_builder /app/target/bbj-church-manager-1.0.0.jar app.jar
 
-# Set production Spring profile to use application-production.properties
+# Set production Spring profile
 ENV SPRING_PROFILES_ACTIVE=production
 
-# Expose port (Render will set PORT environment variable at runtime)
+# Expose port (Render assigns dynamically)
 EXPOSE 8080
 
-# Run the Spring Boot application with embedded Tomcat
-# Spring will read server.port=${PORT:8080} from application-production.properties
+# Run Spring Boot application
 CMD ["java", "-jar", "app.jar"]
