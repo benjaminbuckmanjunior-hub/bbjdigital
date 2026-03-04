@@ -5,7 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 
 @SpringBootApplication
 @ComponentScan(basePackages = {"com.example"})
@@ -26,4 +29,18 @@ public class Application {
                     .maxAge(3600);
         }
     }
+
+    /**
+     * Catch-all controller for React SPA routing
+     * Forwards unmatched routes to index.html so React Router can handle them
+     */
+    @Controller
+    public static class SpaController {
+        @GetMapping(value = "/{path:^(?!api|static|.*\\.\\w+$).*$}")
+        public String forward() {
+            return "forward:/index.html";
+        }
+    }
 }
+
+
