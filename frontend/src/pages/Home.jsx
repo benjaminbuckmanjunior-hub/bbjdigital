@@ -34,10 +34,13 @@ export default function Home() {
 
       <section className="bg-yellow-50 py-16 text-center">
         <h2 className="text-3xl font-bold text-tealDeep mb-6">
-          Service Times
+          Vision
         </h2>
-        <p className="text-lg text-gray-800">Sunday Worship – 9:00 AM</p>
-        <p className="text-lg text-gray-800">Midweek Service – Wednesday 6:00 PM</p>
+        <p className="max-w-3xl mx-auto text-gray-800">
+          To be a beacon of hope where every heart is touched, every soul
+          uplifted, and all are welcomed into the warm embrace of God’s
+          enduring love.
+        </p>
       </section>
     </div>
   );
