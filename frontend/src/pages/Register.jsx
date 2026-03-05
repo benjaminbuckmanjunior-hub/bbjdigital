@@ -154,7 +154,6 @@ export default function Register() {
                     </div>
 
                     {/* Footer Info */}
-                    <p className="text-center text-gray-500 text-xs mt-6">© 2026 BBJ Church Manager</p>
                 </div>
             </div>
         </Layout>
