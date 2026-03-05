@@ -14,6 +14,7 @@ export default function AdminDashboard() {
     const [events, setEvents] = useState([]);
     const [sermons, setSermons] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState('');
     const [adminId] = useState(parseInt(localStorage.getItem('userId')));
     const navigate = useNavigate();
 
@@ -32,6 +33,7 @@ export default function AdminDashboard() {
 
     const fetchAllData = async () => {
         setLoading(true);
+        setError('');
         try {
             const [membersRes, announcementsRes, eventsRes, sermonsRes] = await Promise.all([
                 getMembers(),
@@ -39,12 +41,13 @@ export default function AdminDashboard() {
                 getEvents(),
                 getSermons()
             ]);
-            setMembers(membersRes.data);
-            setAnnouncements(announcementsRes.data);
-            setEvents(eventsRes.data);
-            setSermons(sermonsRes.data);
+            setMembers(membersRes.data?.data || []);
+            setAnnouncements(announcementsRes.data?.data || []);
+            setEvents(eventsRes.data?.data || []);
+            setSermons(sermonsRes.data?.data || []);
         } catch (error) {
             console.error('Error fetching data:', error);
+            setError('Failed to load data: ' + (error.response?.data?.message || error.message));
         } finally {
             setLoading(false);
         }
@@ -148,12 +151,19 @@ export default function AdminDashboard() {
                 <p className="text-gray-600">Manage all church resources</p>
             </div>
 
+            {error && (
+                <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
+                    <p className="font-semibold">Error:</p>
+                    <p>{error}</p>
+                </div>
+            )}
+
             {/* Tab Navigation */}
             <div className="flex flex-wrap gap-2 bg-white p-4 rounded-lg shadow">
-                <TabButton tab="members" label="Members" icon="ðŸ‘¥" />
-                <TabButton tab="announcements" label="Announcements" icon="ðŸ“¢" />
-                <TabButton tab="events" label="Events" icon="ðŸ“…" />
-                <TabButton tab="sermons" label="Sermons" icon="ðŸŽµ" />
+                <TabButton tab="members" label="Members" icon="👥" />
+                <TabButton tab="announcements" label="Announcements" icon="📢" />
+                <TabButton tab="events" label="Events" icon="📅" />
+                <TabButton tab="sermons" label="Sermons" icon="🎵" />
             </div>
 
             {/* Loading State */}
