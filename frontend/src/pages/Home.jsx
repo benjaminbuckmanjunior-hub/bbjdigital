@@ -1,21 +1,29 @@
 
 export default function Home() {
+  const userName = localStorage.getItem('userName');
+  const userType = localStorage.getItem('userType');
+
   return (
     <div>
-      <section className="bg-primary text-white py-24 text-center">
+      <section className="bg-tealDeep text-white py-24 text-center">
         <h1 className="text-5xl font-bold mb-6">
           Welcome to BBJ Church
         </h1>
         <p className="text-lg mb-8 text-gray-200">
           Growing in faith. Serving with love.
         </p>
-        <a href="/register" className="bg-accent hover:bg-accent-hover text-primary font-bold px-8 py-3 rounded-lg transition inline-block">
+        <a href="/register" className="bg-lemon hover:bg-yellow-400 text-tealDeep font-bold px-8 py-3 rounded-lg transition inline-block">
           Register Now
         </a>
+        {userType && userName && (
+          <p className="mt-4 text-xl font-semibold text-lemon">
+            Welcome back, {userName}!
+          </p>
+        )}
       </section>
 
       <section className="bg-white py-16 text-center">
-        <h2 className="text-3xl font-bold text-primary mb-6">
+        <h2 className="text-3xl font-bold text-tealDeep mb-6">
           Our Mission
         </h2>
         <p className="max-w-3xl mx-auto text-gray-700">
@@ -24,8 +32,8 @@ export default function Home() {
         </p>
       </section>
 
-      <section className="bg-accent-soft py-16 text-center">
-        <h2 className="text-3xl font-bold text-primary mb-6">
+      <section className="bg-yellow-50 py-16 text-center">
+        <h2 className="text-3xl font-bold text-tealDeep mb-6">
           Service Times
         </h2>
         <p className="text-lg text-gray-800">Sunday Worship – 9:00 AM</p>

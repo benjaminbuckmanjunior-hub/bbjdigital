@@ -5,16 +5,10 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          DEFAULT: "#0F4C5C",
-          dark: "#0B3A45",
-          light: "#136F7A"
-        },
-        accent: {
-          DEFAULT: "#F4D35E",
-          hover: "#FFD84D",
-          soft: "#FFF3B0"
-        }
+        primary: "#0F4C5C",
+        accent: "#F4D35E",
+        tealDeep: "#0F766E",
+        lemon: "#F4D03F"
       }
     }
   },

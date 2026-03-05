@@ -42,8 +42,9 @@ export const login = (email, password, userType) => {
   return api.post('/login', { email, password, userType });
 };
 
-export const register = (name, password) => {
-  return api.post('/register', { name, password });
+export const register = (data) => {
+  // data should contain at least { name }
+  return api.post('/register', data);
 };
 
 // Member APIs

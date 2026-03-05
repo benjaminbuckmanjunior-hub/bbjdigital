@@ -5,11 +5,7 @@ import Layout from '../layouts/Layout';
 
 export default function Register() {
     const [formData, setFormData] = useState({
-        name: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-        phone: ''
+        name: ''
     });
     const [error, setError] = useState('');
     const navigate = useNavigate();
@@ -23,24 +19,27 @@ export default function Register() {
         e.preventDefault();
         setError('');
         
-        if (formData.password !== formData.confirmPassword) {
-            setError('Passwords do not match');
-            return;
-        }
 
         try {
-            const response = await register({
-                name: formData.name,
-                email: formData.email,
-                password: formData.password,
-                phone: formData.phone
-            });
-            localStorage.setItem('token', response.token);
-            localStorage.setItem('role', response.role);
-            localStorage.setItem('memberId', response.memberId);
-            navigate('/home');
+            // send only what backend expects; extras are ignored
+            const response = await register({ name: formData.name });
+            if (response.data?.success) {
+                const generatedEmail = response.data.email;
+                // optionally save credentials
+                localStorage.setItem('memberEmail', generatedEmail);
+                // auto-login as member
+                if (response.data.userId) {
+                    localStorage.setItem('userId', response.data.userId);
+                    localStorage.setItem('userType', 'member');
+                }
+                alert(`WELCOME TO BBJ DIGITAL CHURCH SYSTEM. YOUR LOGIN EMAIL IS "${generatedEmail}" USE THIS ANYTIME LOGGING IN`);
+                // navigate to home/dashboard
+                navigate('/home');
+            } else {
+                setError(response.data?.message || 'Registration failed');
+            }
         } catch (err) {
-            setError(err.message || 'Registration failed');
+            setError(err.message || 'Network error');
         }
     };
 
@@ -79,56 +78,9 @@ export default function Register() {
                                 />
                             </div>
 
-                            <div>
-                                <label className="block text-sm font-semibold text-tealDeep mb-2">Email Address</label>
-                                <input 
-                                    type="email"
-                                    name="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-tealDeep focus:ring-1 focus:ring-lemon transition"
-                                    placeholder="your@email.com"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-tealDeep mb-2">Phone (Optional)</label>
-                                <input 
-                                    type="tel"
-                                    name="phone"
-                                    value={formData.phone}
-                                    onChange={handleChange}
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-tealDeep focus:ring-1 focus:ring-lemon transition"
-                                    placeholder="+1 (555) 123-4567"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-tealDeep mb-2">Password</label>
-                                <input 
-                                    type="password"
-                                    name="password"
-                                    value={formData.password}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-tealDeep focus:ring-1 focus:ring-lemon transition"
-                                    placeholder="••••••••"
-                                />
-                            </div>
-
-                            <div>
-                                <label className="block text-sm font-semibold text-tealDeep mb-2">Confirm Password</label>
-                                <input 
-                                    type="password"
-                                    name="confirmPassword"
-                                    value={formData.confirmPassword}
-                                    onChange={handleChange}
-                                    required
-                                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:border-tealDeep focus:ring-1 focus:ring-lemon transition"
-                                    placeholder="••••••••"
-                                />
-                            </div>
+                            <p className="text-gray-600 text-sm">
+                                An email will be automatically generated for you after registration. Please save it for logging in.
+                            </p>
 
                             <button 
                                 type="submit"

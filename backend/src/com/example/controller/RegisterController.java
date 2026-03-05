@@ -33,10 +33,15 @@ public class RegisterController {
             MemberDAO memberDao = new MemberDAO();
             
             if (memberDao.addMember(member)) {
+                // fetch the inserted member to obtain generated ID
+                Member saved = memberDao.getMemberByEmail(email);
                 response.put("success", true);
                 response.put("message", "Registration successful");
                 response.put("email", email);
                 response.put("password", password);
+                if (saved != null) {
+                    response.put("userId", saved.getId());
+                }
             } else {
                 response.put("success", false);
                 response.put("message", "Registration failed");
@@ -52,7 +57,8 @@ public class RegisterController {
 
     private String generateAutoEmail(String name) {
         String sanitized = name.toLowerCase().replaceAll("\\s+", ".");
-        return sanitized + "@bbj.local";
+        // use corporate domain for church members
+        return sanitized + "@bbj.com";
     }
 
     private String generatePassword() {
