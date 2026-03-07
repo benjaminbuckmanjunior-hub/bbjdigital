@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import Layout from '../layouts/Layout';
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState('');
@@ -47,7 +48,8 @@ export default function ForgotPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+    <Layout>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-2" style={{ color: '#0f4c5c' }}>
           Reset Password
@@ -106,6 +108,6 @@ export default function ForgotPassword() {
           </p>
         </div>
       </div>
-    </div>
+    </Layout>
   );
 }

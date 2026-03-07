@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams, Link } from 'react-router-dom';
+import Layout from '../layouts/Layout';
 
 export default function ResetPassword() {
   const [newPassword, setNewPassword] = useState('');
@@ -67,7 +68,8 @@ export default function ResetPassword() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
+    <Layout>
+      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200">
       <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
         <h1 className="text-3xl font-bold text-center mb-2" style={{ color: '#0f4c5c' }}>
           Set New Password
@@ -150,6 +152,6 @@ export default function ResetPassword() {
           </div>
         )}
       </div>
-    </div>
+    </Layout>
   );
 }
