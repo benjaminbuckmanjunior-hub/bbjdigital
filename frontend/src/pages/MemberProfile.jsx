@@ -262,7 +262,7 @@ export default function MemberProfile() {
                             </div>
                             <button
                                 onClick={handlePrivacyToggle}
-                                className={`px-4 sm:px-6 py-2 rounded font-semibold transition text-sm sm:text-base whitespace-nowrap ${\n                                    formData.isProfilePublic\n                                        ? 'bg-red-500 text-white hover:bg-red-600'\n                                        : 'bg-green-500 text-white hover:bg-green-600'\n                                }`}
+                                className={`px-4 sm:px-6 py-2 rounded font-semibold transition text-sm sm:text-base whitespace-nowrap ${formData.isProfilePublic ? 'bg-red-500 text-white hover:bg-red-600' : 'bg-green-500 text-white hover:bg-green-600'}`}
                             >
                                 {formData.isProfilePublic ? 'Make Private' : 'Make Public'}
                             </button>
