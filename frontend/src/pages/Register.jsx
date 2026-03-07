@@ -40,6 +40,8 @@ export default function Register() {
                 if (response.data.userId) {
                     localStorage.setItem('userId', response.data.userId);
                     localStorage.setItem('userType', 'member');
+                    localStorage.setItem('userName', `${formData.firstName} ${formData.lastName}`);
+                    localStorage.setItem('isNewMember', 'true');
                 }
                 alert(`WELCOME TO BBJ DIGITAL CHURCH MANAGEMENT SYSTEM. YOUR LOGIN EMAIL IS "${generatedEmail}" USE THIS ANYTIME LOGGING IN`);
                 // navigate to member dashboard

@@ -21,6 +21,13 @@ export default function MemberDashboard() {
 
     const isMobile = windowWidth < 768;
     const memberName = localStorage.getItem('userName') || 'Member';
+    const isNewMember = localStorage.getItem('isNewMember') === 'true';
+
+    useEffect(() => {
+        if (isNewMember) {
+            localStorage.removeItem('isNewMember');
+        }
+    }, [isNewMember]);
 
     useEffect(() => {
         const userType = localStorage.getItem('userType');
@@ -145,8 +152,12 @@ export default function MemberDashboard() {
                     <div className="space-y-4 sm:space-y-6">
                         {/* Welcome Section */}
                         <div className="mb-2 sm:mb-4">
-                            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep mb-1 sm:mb-2">Welcome back!</h2>
-                            <p className="text-sm sm:text-base text-gray-600">Welcome to your church community portal</p>
+                            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep mb-1 sm:mb-2">
+                                {isNewMember ? '🎉 Welcome to BBJ Digital Church!' : 'Welcome back!'}
+                            </h2>
+                            <p className="text-sm sm:text-base text-gray-600">
+                                {isNewMember ? 'Thank you for joining our church community! Explore the portal to stay connected.' : 'Welcome to your church community portal'}
+                            </p>
                         </div>
 
                         {/* Member Info Card */}
