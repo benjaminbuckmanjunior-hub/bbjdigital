@@ -6,20 +6,21 @@ services:
     plan: free
     dockerfilePath: Dockerfile
     envVars:
-      # PORT: Leave this unset - Render automatically assigns a port
-      # Database Configuration (use your TiDB Cloud credentials)
+      # Database Configuration - TiDB Cloud
+      - key: ENVIRONMENT
+        value: production
       - key: DB_URL
-        value: jdbc:mysql://nrMPj1ECajN3NtY.root:LSTkYzHVTdplnF2X@gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/bbj?useSSL=false&serverTimezone=UTC&allowPublicKeyRetrieval=true
-      - key: DB_USER
+        value: jdbc:mysql://gateway01.eu-central-1.prod.aws.tidbcloud.com:4000/bbj?useSSL=true&serverTimezone=UTC
+      - key: DB_USERNAME
         value: nrMPj1ECajN3NtY.root
       - key: DB_PASSWORD
-        value: LSTkYzHVTdplnF2X
+        value: dFkBlyj7CjtmqK08
       # B2 File Upload Service Credentials
       - key: B2_KEY_ID
-        value: 0055be753f9e33f0000000001
+        value: 5be753f9e33f
       - key: B2_APP_KEY
         value: K005uAur9WX0YGfPwOwbdyCsVwKOhuA
       - key: B2_BUCKET_NAME
-        value: bbj1532
+        value: bbj-church-media
 
 
