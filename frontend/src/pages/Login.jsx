@@ -23,7 +23,7 @@ export default function Login() {
         if (data.userType === 'admin') {
           navigate('/admin');
         } else if (data.userType === 'member') {
-          navigate('/home');
+          navigate('/member-dashboard');
         }
       } else {
         setError(response.data?.message || 'Login failed');

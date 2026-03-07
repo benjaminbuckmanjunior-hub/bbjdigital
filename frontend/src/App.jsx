@@ -3,6 +3,7 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import AdminLogin from "./pages/AdminLogin";
 import Register from "./pages/Register";
+import MemberDashboard from "./pages/MemberDashboard";
 import Announcements from "./pages/Announcements";
 import Events from "./pages/Events";
 import Sermons from "./pages/Sermons";
@@ -28,6 +29,14 @@ export default function App() {
       <Route path="/login" element={<Login />} />
       <Route path="/admin-login" element={<AdminLogin />} />
       <Route path="/register" element={<Register />} />
+      <Route
+        path="/member-dashboard"
+        element={
+          <ProtectedRoute requiredRole="member">
+            <MemberDashboard />
+          </ProtectedRoute>
+        }
+      />
 
       <Route
         path="/announcements"

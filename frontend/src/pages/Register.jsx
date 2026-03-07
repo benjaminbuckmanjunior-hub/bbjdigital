@@ -41,8 +41,8 @@ export default function Register() {
                     localStorage.setItem('userType', 'member');
                 }
                 alert(`WELCOME TO BBJ DIGITAL CHURCH MANAGEMENT SYSTEM. YOUR LOGIN EMAIL IS "${generatedEmail}" USE THIS ANYTIME LOGGING IN`);
-                // navigate to home/dashboard
-                navigate('/home');
+                // navigate to member dashboard
+                navigate('/member-dashboard');
             } else {
                 setError(response.data?.message || 'Registration failed');
             }
