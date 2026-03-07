@@ -19,7 +19,6 @@ export default function AdminDashboard() {
     const [adminName] = useState(localStorage.getItem('userName'));
     const navigate = useNavigate();
 
-    // Form states
     const [newAnnouncement, setNewAnnouncement] = useState({ title: '', message: '' });
     const [newEvent, setNewEvent] = useState({ title: '', description: '', eventDate: '', location: '' });
     const [newSermon, setNewSermon] = useState({ title: '', description: '', filePath: '', fileType: 'mp3' });
@@ -28,7 +27,6 @@ export default function AdminDashboard() {
         localStorage.clear();
         navigate('/login');
     };
-
     useEffect(() {
         const userType = localStorage.getItem('userType');
         if (userType !== 'admin') {
