@@ -47,6 +47,8 @@ public class Member {
         this.email = email;
         this.password = password;
         this.status = "active";
+        this.joinedDate = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     // Legacy constructor for backward compatibility
@@ -58,6 +60,8 @@ public class Member {
         this.email = email;
         this.password = password;
         this.status = "active";
+        this.joinedDate = LocalDateTime.now();
+        this.updatedAt = LocalDateTime.now();
     }
 
     public int getId() { return id; }

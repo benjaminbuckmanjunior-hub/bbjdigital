@@ -9,7 +9,7 @@ import com.example.db.DBConnection;
 public class MemberDAO {
     
     public boolean addMember(Member member) {
-        String query = "INSERT INTO members (first_name, last_name, phone_number, email, password, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO members (first_name, last_name, phone_number, email, password, status, joined_date, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, member.getFirstName());
@@ -18,6 +18,8 @@ public class MemberDAO {
             stmt.setString(4, member.getEmail());
             stmt.setString(5, member.getPassword());
             stmt.setString(6, member.getStatus() != null ? member.getStatus() : "active");
+            stmt.setObject(7, member.getJoinedDate() != null ? member.getJoinedDate() : java.time.LocalDateTime.now());
+            stmt.setObject(8, member.getUpdatedAt() != null ? member.getUpdatedAt() : java.time.LocalDateTime.now());
             
             System.out.println("MemberDAO: Executing INSERT for email: " + member.getEmail());
             System.out.println("MemberDAO: firstName=" + member.getFirstName() + ", lastName=" + member.getLastName() + 
