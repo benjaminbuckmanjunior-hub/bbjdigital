@@ -19,19 +19,18 @@ public class MemberDAO {
             stmt.setString(5, member.getPassword());
             stmt.setString(6, member.getStatus() != null ? member.getStatus() : "active");
             
-            System.out.println("Executing query: " + query);
-            System.out.println("Values: firstName=" + member.getFirstName() + ", lastName=" + member.getLastName() + 
-                               ", phoneNumber=" + member.getPhoneNumber() + ", email=" + member.getEmail() + ", status=" + member.getStatus());
+            System.out.println("MemberDAO: Executing INSERT for email: " + member.getEmail());
+            System.out.println("MemberDAO: firstName=" + member.getFirstName() + ", lastName=" + member.getLastName() + 
+                               ", phoneNumber=" + member.getPhoneNumber() + ", status=" + member.getStatus());
             
             int result = stmt.executeUpdate();
-            System.out.println("Member insert result: " + result + " for email: " + member.getEmail());
+            System.out.println("MemberDAO: Insert result = " + result + " rows affected for email: " + member.getEmail());
             return result > 0;
         } catch (SQLException e) {
-            System.err.println("SQL Error adding member: " + e.getMessage());
-            System.err.println("SQL State: " + e.getSQLState() + ", Error Code: " + e.getErrorCode());
-            System.err.println("Full stack trace:");
+            System.err.println("MemberDAO SQL Error: " + e.getMessage());
+            System.err.println("MemberDAO SQL State: " + e.getSQLState() + ", Error Code: " + e.getErrorCode());
             e.printStackTrace();
-            return false;
+            throw new RuntimeException("Database error: " + e.getSQLState() + " - " + e.getMessage(), e);
         }
     }
 

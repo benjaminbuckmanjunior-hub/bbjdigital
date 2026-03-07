@@ -45,25 +45,33 @@ public class RegisterController {
             Member member = new Member(firstName, lastName, phoneNumber, email, password);
             MemberDAO memberDao = new MemberDAO();
             
-            if (memberDao.addMember(member)) {
-                // fetch the inserted member to obtain generated ID
-                Member saved = memberDao.getMemberByEmail(email);
-                response.put("success", true);
-                response.put("message", "Registration successful");
-                response.put("email", email);
-                if (saved != null) {
-                    response.put("userId", saved.getId());
+            try {
+                if (memberDao.addMember(member)) {
+                    // fetch the inserted member to obtain generated ID
+                    Member saved = memberDao.getMemberByEmail(email);
+                    response.put("success", true);
+                    response.put("message", "Registration successful");
+                    response.put("email", email);
+                    if (saved != null) {
+                        response.put("userId", saved.getId());
+                    }
+                } else {
+                    // addMember returned false but no exception was thrown
+                    response.put("success", false);
+                    response.put("message", "Registration failed - database insert returned 0 rows. This may indicate a duplicate email or database constraint violation.");
+                    System.err.println("ERROR: addMember returned false for email: " + email + " but no SQL exception was thrown");
                 }
-            } else {
+            } catch (RuntimeException rte) {
+                // This would be from the SQL error thrown by MemberDAO
                 response.put("success", false);
-                response.put("message", "Registration failed - Database insert returned 0 rows. Check member DAO for details.");
-                System.err.println("Registration: addMember returned false for email: " + email);
+                response.put("message", rte.getMessage());
+                System.err.println("RuntimeException during registration: " + rte.getMessage());
+                rte.printStackTrace();
             }
         } catch (Exception e) {
             String errorMsg = e.getMessage() != null ? e.getMessage() : "Unknown error";
             response.put("success", false);
             response.put("message", "Server error: " + errorMsg);
-            response.put("errorDetails", errorMsg);
             System.err.println("Registration exception: " + errorMsg);
             e.printStackTrace();
         }
