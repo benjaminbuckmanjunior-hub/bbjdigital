@@ -1,16 +1,37 @@
 package com.example.model;
 
 import java.time.LocalDateTime;
+import jakarta.persistence.*;
 
+@Entity
+@Table(name = "members")
 public class Member {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    
+    @Column(name = "first_name", nullable = false, length = 50)
     private String firstName;
+    
+    @Column(name = "last_name", nullable = false, length = 50)
     private String lastName;
+    
+    @Column(name = "phone_number", length = 20)
     private String phoneNumber;
+    
+    @Column(name = "email", nullable = false, length = 100, unique = true)
     private String email;
+    
+    @Column(name = "password", nullable = false, length = 255)
     private String password;
+    
+    @Column(name = "status", nullable = false, length = 10)
     private String status;
+    
+    @Column(name = "joined_date", nullable = false, updatable = false)
     private LocalDateTime joinedDate;
+    
+    @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
 
     public Member() {}
