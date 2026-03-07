@@ -108,6 +108,7 @@ export default function ForgotPassword() {
           </p>
         </div>
       </div>
+    </div>
     </Layout>
   );
 }
