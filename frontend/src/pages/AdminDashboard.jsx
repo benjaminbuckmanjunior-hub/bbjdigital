@@ -19,9 +19,19 @@ export default function AdminDashboard() {
     const [adminName] = useState(localStorage.getItem('userName'));
     const navigate = useNavigate();
 
+    const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
+    const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
     const [newAnnouncement, setNewAnnouncement] = useState({ title: '', message: '' });
     const [newEvent, setNewEvent] = useState({ title: '', description: '', eventDate: '', location: '' });
     const [newSermon, setNewSermon] = useState({ title: '', description: '', filePath: '', fileType: 'mp3' });
+
+    useEffect(() => {
+        const handleResize = () => setWindowWidth(window.innerWidth);
+        window.addEventListener('resize', handleResize);
+        return () => window.removeEventListener('resize', handleResize);
+    }, []);
+
+    const isMobile = windowWidth < 768;
 
     const handleLogout = () => {
         localStorage.clear();
@@ -137,35 +147,51 @@ export default function AdminDashboard() {
 
     const TabButton = ({ tab, label, icon }) => (
         <button
-            onClick={() => setActiveTab(tab)}
-            className={`px-6 py-3 font-semibold transition ${
+            onClick={() => {
+                setActiveTab(tab);
+                setMobileMenuOpen(false);
+            }}
+            className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold transition whitespace-nowrap ${
                 activeTab === tab
                     ? 'bg-white text-tealDeep border-b-4 border-lemon'
                     : 'text-white hover:bg-opacity-80'
             }`}
         >
-            {icon} {label}
+            <span className="hidden sm:inline">{icon} </span>
+            {label}
         </button>
     );
 
     return (
         <div className="min-h-screen bg-gray-50">
             {/* Navigation Bar */}
-            <div className="bg-tealDeep text-white sticky top-0 z-10 shadow-lg">
-                <div className="max-w-7xl mx-auto px-4 md:px-6">
-                    {/* Top row with title and logout */}
-                    <div className="flex justify-between items-center py-3">
-                        <h1 className="text-2xl font-bold">Admin Dashboard</h1>
+            <div className="bg-tealDeep text-white sticky top-0 z-50 shadow-lg">
+                <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6">
+                    {/* Top row with title, menu button, and logout */}
+                    <div className="flex justify-between items-center py-2 sm:py-3 gap-2">
+                        <h1 className="text-lg sm:text-xl md:text-2xl font-bold flex-1">
+                            Admin Dashboard
+                        </h1>
+                        
+                        {/* Hamburger Menu Button - Mobile Only */}
+                        <button
+                            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                            className="md:hidden bg-tealDeep hover:bg-teal-700 text-white px-3 py-2 rounded-lg transition"
+                            aria-label="Toggle menu"
+                        >
+                            {mobileMenuOpen ? '✕' : '☰'}
+                        </button>
+                        
                         <button
                             onClick={handleLogout}
-                            className="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition font-semibold"
+                            className="bg-red-500 hover:bg-red-600 text-white px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm md:text-base rounded-lg transition font-semibold flex-shrink-0"
                         >
-                            Logout ({adminName})
+                            {isMobile ? 'Logout' : `Logout (${adminName})`}
                         </button>
                     </div>
 
-                    {/* Tabs row */}
-                    <div className="flex gap-0">
+                    {/* Tabs row - Desktop (visible), Mobile dropdown (hidden until menu open) */}
+                    <div className={`${mobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col md:flex-row gap-0 pb-2 md:pb-0`}>
                         <TabButton tab="members" label="Members" icon="👥" />
                         <TabButton tab="announcements" label="Announcements" icon="📢" />
                         <TabButton tab="events" label="Events" icon="📅" />
@@ -175,7 +201,7 @@ export default function AdminDashboard() {
             </div>
 
             {/* Content Area */}
-            <div className="max-w-7xl mx-auto px-4 md:px-6 py-8">
+            <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 py-4 sm:py-6 md:py-8">
                 {error && (
                     <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4">
                         <p className="font-semibold">Error:</p>
@@ -188,18 +214,18 @@ export default function AdminDashboard() {
 
             {/* Members Tab */}
             {activeTab === 'members' && !loading && (
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-tealDeep">Members</h2>
+                <div className="space-y-4 sm:space-y-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep">Members</h2>
                     <div className="grid grid-cols-1 gap-4">
                         {members.map(member => (
-                            <div key={member.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-lemon flex justify-between items-center">
-                                <div>
-                                    <p className="font-bold text-tealDeep">{member.name}</p>
-                                    <p className="text-gray-600 text-sm">{member.email}</p>
+                            <div key={member.id} className="bg-white p-3 sm:p-4 rounded-lg shadow border-l-4 border-lemon flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-4">
+                                <div className="flex-1 min-w-0">
+                                    <p className="font-bold text-base sm:text-lg text-tealDeep">{member.name}</p>
+                                    <p className="text-gray-600 text-xs sm:text-sm break-words">{member.email}</p>
                                 </div>
                                 <button
                                     onClick={() => handleDeleteMember(member.id)}
-                                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                                    className="bg-red-500 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm rounded hover:bg-red-600 transition flex-shrink-0"
                                 >
                                     Delete
                                 </button>
@@ -211,41 +237,41 @@ export default function AdminDashboard() {
 
             {/* Announcements Tab */}
             {activeTab === 'announcements' && !loading && (
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-tealDeep">Create Announcement</h2>
-                    <div className="bg-white p-6 rounded-lg shadow space-y-4">
+                <div className="space-y-4 sm:space-y-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep">Create Announcement</h2>
+                    <div className="bg-white p-4 sm:p-6 rounded-lg shadow space-y-4">
                         <input
                             type="text"
                             placeholder="Announcement Title"
                             value={newAnnouncement.title}
                             onChange={(e) => setNewAnnouncement({ ...newAnnouncement, title: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
                         />
                         <textarea
                             placeholder="Announcement Message"
                             value={newAnnouncement.message}
                             onChange={(e) => setNewAnnouncement({ ...newAnnouncement, message: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep h-32"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep h-24 sm:h-32 text-sm sm:text-base"
                         />
                         <button
                             onClick={handleAddAnnouncement}
-                            className="bg-tealDeep text-white px-6 py-2 rounded font-semibold hover:bg-teal-700 transition"
+                            className="w-full sm:w-auto bg-tealDeep text-white px-4 sm:px-6 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm sm:text-base"
                         >
                             Post Announcement
                         </button>
                     </div>
-                    <h2 className="text-2xl font-bold text-tealDeep mt-8">Announcements</h2>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep mt-6 sm:mt-8">Announcements</h2>
                     <div className="space-y-4">
                         {announcements.map(ann => (
-                            <div key={ann.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-lemon">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <p className="font-bold text-lg text-tealDeep">{ann.title}</p>
-                                        <p className="text-gray-700 mt-2">{ann.message}</p>
+                            <div key={ann.id} className="bg-white p-3 sm:p-4 rounded-lg shadow border-l-4 border-lemon">
+                                <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4">
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-bold text-base sm:text-lg text-tealDeep">{ann.title}</p>
+                                        <p className="text-gray-700 text-sm sm:text-base mt-2 break-words">{ann.message}</p>
                                     </div>
                                     <button
                                         onClick={() => handleDeleteAnnouncement(ann.id)}
-                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition ml-4"
+                                        className="bg-red-500 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm rounded hover:bg-red-600 transition flex-shrink-0"
                                     >
                                         Delete
                                     </button>
@@ -258,55 +284,55 @@ export default function AdminDashboard() {
 
             {/* Events Tab */}
             {activeTab === 'events' && !loading && (
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-tealDeep">Create Event</h2>
-                    <div className="bg-white p-6 rounded-lg shadow space-y-4">
+                <div className="space-y-4 sm:space-y-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep">Create Event</h2>
+                    <div className="bg-white p-4 sm:p-6 rounded-lg shadow space-y-4">
                         <input
                             type="text"
                             placeholder="Event Title"
                             value={newEvent.title}
                             onChange={(e) => setNewEvent({ ...newEvent, title: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
                         />
                         <textarea
                             placeholder="Event Description"
                             value={newEvent.description}
                             onChange={(e) => setNewEvent({ ...newEvent, description: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep h-24"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep h-20 sm:h-24 text-sm sm:text-base"
                         />
                         <input
                             type="datetime-local"
                             value={newEvent.eventDate}
                             onChange={(e) => setNewEvent({ ...newEvent, eventDate: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
                         />
                         <input
                             type="text"
                             placeholder="Event Location"
                             value={newEvent.location}
                             onChange={(e) => setNewEvent({ ...newEvent, location: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
                         />
                         <button
                             onClick={handleAddEvent}
-                            className="bg-tealDeep text-white px-6 py-2 rounded font-semibold hover:bg-teal-700 transition"
+                            className="w-full sm:w-auto bg-tealDeep text-white px-4 sm:px-6 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm sm:text-base"
                         >
                             Create Event
                         </button>
                     </div>
-                    <h2 className="text-2xl font-bold text-tealDeep mt-8">Events</h2>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep mt-6 sm:mt-8">Events</h2>
                     <div className="grid grid-cols-1 gap-4">
                         {events.map(event => (
-                            <div key={event.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-lemon">
-                                <div className="flex justify-between items-start">
-                                    <div>
-                                        <p className="font-bold text-lg text-tealDeep">{event.title}</p>
-                                        <p className="text-gray-600 text-sm mt-1">{new Date(event.eventDate).toLocaleString()}</p>
-                                        <p className="text-gray-700 mt-2">{event.location}</p>
+                            <div key={event.id} className="bg-white p-3 sm:p-4 rounded-lg shadow border-l-4 border-lemon">
+                                <div className="flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4">
+                                    <div className="flex-1 min-w-0">
+                                        <p className="font-bold text-base sm:text-lg text-tealDeep">{event.title}</p>
+                                        <p className="text-gray-600 text-xs sm:text-sm mt-1">{new Date(event.eventDate).toLocaleString()}</p>
+                                        <p className="text-gray-700 text-sm sm:text-base mt-2 break-words">{event.location}</p>
                                     </div>
                                     <button
                                         onClick={() => handleDeleteEvent(event.id)}
-                                        className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                                        className="bg-red-500 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm rounded hover:bg-red-600 transition flex-shrink-0"
                                     >
                                         Delete
                                     </button>
@@ -319,26 +345,26 @@ export default function AdminDashboard() {
 
             {/* Sermons Tab */}
             {activeTab === 'sermons' && !loading && (
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-tealDeep">Upload Sermon</h2>
-                    <div className="bg-white p-6 rounded-lg shadow space-y-4">
+                <div className="space-y-4 sm:space-y-6">
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep">Upload Sermon</h2>
+                    <div className="bg-white p-4 sm:p-6 rounded-lg shadow space-y-4">
                         <input
                             type="text"
                             placeholder="Sermon Title"
                             value={newSermon.title}
                             onChange={(e) => setNewSermon({ ...newSermon, title: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
                         />
                         <textarea
                             placeholder="Sermon Description"
                             value={newSermon.description}
                             onChange={(e) => setNewSermon({ ...newSermon, description: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep h-24"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep h-20 sm:h-24 text-sm sm:text-base"
                         />
                         <select
                             value={newSermon.fileType}
                             onChange={(e) => setNewSermon({ ...newSermon, fileType: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
                         >
                             <option value="mp3">Audio (MP3)</option>
                             <option value="mp4">Video (MP4)</option>
@@ -348,27 +374,27 @@ export default function AdminDashboard() {
                             placeholder="File URL or Path"
                             value={newSermon.filePath}
                             onChange={(e) => setNewSermon({ ...newSermon, filePath: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 rounded focus:outline-none focus:border-tealDeep"
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
                         />
                         <button
                             onClick={handleAddSermon}
-                            className="bg-tealDeep text-white px-6 py-2 rounded font-semibold hover:bg-teal-700 transition"
+                            className="w-full sm:w-auto bg-tealDeep text-white px-4 sm:px-6 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm sm:text-base"
                         >
                             Upload Sermon
                         </button>
                     </div>
-                    <h2 className="text-2xl font-bold text-tealDeep mt-8">Sermons</h2>
+                    <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep mt-6 sm:mt-8">Sermons</h2>
                     <div className="grid grid-cols-1 gap-4">
                         {sermons.map(sermon => (
-                            <div key={sermon.id} className="bg-white p-4 rounded-lg shadow border-l-4 border-lemon flex justify-between items-start">
-                                <div>
-                                    <p className="font-bold text-lg text-tealDeep">{sermon.title}</p>
-                                    <p className="text-gray-600 text-sm">{sermon.fileType.toUpperCase()}</p>
-                                    <p className="text-gray-700 mt-2">{sermon.description}</p>
+                            <div key={sermon.id} className="bg-white p-3 sm:p-4 rounded-lg shadow border-l-4 border-lemon flex flex-col sm:flex-row justify-between items-start gap-3 sm:gap-4">
+                                <div className="flex-1 min-w-0">
+                                    <p className="font-bold text-base sm:text-lg text-tealDeep">{sermon.title}</p>
+                                    <p className="text-gray-600 text-xs sm:text-sm">{sermon.fileType.toUpperCase()}</p>
+                                    <p className="text-gray-700 text-sm sm:text-base mt-2 break-words">{sermon.description}</p>
                                 </div>
                                 <button
                                     onClick={() => handleDeleteSermon(sermon.id)}
-                                    className="bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition"
+                                    className="bg-red-500 text-white px-2 sm:px-3 py-1 text-xs sm:text-sm rounded hover:bg-red-600 transition flex-shrink-0"
                                 >
                                     Delete
                                 </button>
