@@ -56,12 +56,15 @@ public class RegisterController {
                 }
             } else {
                 response.put("success", false);
-                response.put("message", "Registration failed - please check all fields and try again");
+                response.put("message", "Registration failed - Database insert returned 0 rows. Check member DAO for details.");
+                System.err.println("Registration: addMember returned false for email: " + email);
             }
         } catch (Exception e) {
+            String errorMsg = e.getMessage() != null ? e.getMessage() : "Unknown error";
             response.put("success", false);
-            response.put("message", "Server error: " + e.getMessage());
-            System.err.println("Registration error details: " + e.getMessage());
+            response.put("message", "Server error: " + errorMsg);
+            response.put("errorDetails", errorMsg);
+            System.err.println("Registration exception: " + errorMsg);
             e.printStackTrace();
         }
         

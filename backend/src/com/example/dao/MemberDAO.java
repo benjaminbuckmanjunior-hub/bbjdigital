@@ -18,14 +18,21 @@ public class MemberDAO {
             stmt.setString(4, member.getEmail());
             stmt.setString(5, member.getPassword());
             stmt.setString(6, member.getStatus() != null ? member.getStatus() : "active");
+            
+            System.out.println("Executing query: " + query);
+            System.out.println("Values: firstName=" + member.getFirstName() + ", lastName=" + member.getLastName() + 
+                               ", phoneNumber=" + member.getPhoneNumber() + ", email=" + member.getEmail() + ", status=" + member.getStatus());
+            
             int result = stmt.executeUpdate();
             System.out.println("Member insert result: " + result + " for email: " + member.getEmail());
             return result > 0;
         } catch (SQLException e) {
             System.err.println("SQL Error adding member: " + e.getMessage());
+            System.err.println("SQL State: " + e.getSQLState() + ", Error Code: " + e.getErrorCode());
+            System.err.println("Full stack trace:");
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public Member getMemberById(int id) {
