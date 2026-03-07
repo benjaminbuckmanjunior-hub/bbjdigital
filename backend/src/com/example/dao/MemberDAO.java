@@ -18,8 +18,11 @@ public class MemberDAO {
             stmt.setString(4, member.getEmail());
             stmt.setString(5, member.getPassword());
             stmt.setString(6, member.getStatus() != null ? member.getStatus() : "active");
-            return stmt.executeUpdate() > 0;
+            int result = stmt.executeUpdate();
+            System.out.println("Member insert result: " + result + " for email: " + member.getEmail());
+            return result > 0;
         } catch (SQLException e) {
+            System.err.println("SQL Error adding member: " + e.getMessage());
             e.printStackTrace();
         }
         return false;

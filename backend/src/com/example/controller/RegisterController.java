@@ -56,11 +56,12 @@ public class RegisterController {
                 }
             } else {
                 response.put("success", false);
-                response.put("message", "Registration failed");
+                response.put("message", "Registration failed - please check all fields and try again");
             }
         } catch (Exception e) {
             response.put("success", false);
             response.put("message", "Server error: " + e.getMessage());
+            System.err.println("Registration error details: " + e.getMessage());
             e.printStackTrace();
         }
         
