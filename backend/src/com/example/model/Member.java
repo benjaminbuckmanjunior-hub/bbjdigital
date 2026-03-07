@@ -30,6 +30,15 @@ public class Member {
     @Column(name = "password", nullable = false, length = 255)
     private String password;
     
+    @Column(name = "profile_picture_url", length = 500)
+    private String profilePictureUrl;
+    
+    @Column(name = "is_profile_public", nullable = false)
+    private Boolean isProfilePublic = true;
+    
+    @Column(name = "bio", columnDefinition = "TEXT")
+    private String bio;
+    
     @Column(name = "status", nullable = false, length = 10)
     private String status;
     
@@ -105,4 +114,13 @@ public class Member {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+    
+    public String getProfilePictureUrl() { return profilePictureUrl; }
+    public void setProfilePictureUrl(String profilePictureUrl) { this.profilePictureUrl = profilePictureUrl; }
+    
+    public Boolean getIsProfilePublic() { return isProfilePublic != null ? isProfilePublic : true; }
+    public void setIsProfilePublic(Boolean isProfilePublic) { this.isProfilePublic = isProfilePublic; }
+    
+    public String getBio() { return bio; }
+    public void setBio(String bio) { this.bio = bio; }
 }

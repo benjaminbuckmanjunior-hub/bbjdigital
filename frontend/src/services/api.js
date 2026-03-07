@@ -137,5 +137,36 @@ export const deleteSermon = (id) => {
   return api.delete(`/sermons/${id}`);
 };
 
+// File upload endpoints
+export const uploadProfilePicture = (formData) => {
+  return api.post('/upload/profile-picture', formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
+  });
+};
+
+// Member Profile APIs
+export const getMemberProfile = (memberId) => {
+  return api.get(`/member/${memberId}`);
+};
+
+export const getCurrentMemberProfile = () => {
+  const memberId = localStorage.getItem('userId');
+  return api.get(`/member/${memberId}`);
+};
+
+export const updateMemberProfile = (memberId, data) => {
+  return api.put(`/member/${memberId}/profile`, data);
+};
+
+export const updateProfilePrivacy = (memberId, isPublic) => {
+  return api.put(`/member/${memberId}/privacy`, { isProfilePublic: isPublic });
+};
+
+export const getPublicMemberProfile = (memberId) => {
+  return api.get(`/member/public/${memberId}`);
+};
+
 export default api;
 

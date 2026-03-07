@@ -27,7 +27,8 @@ public class DBConnection {
             
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection conn = DriverManager.getConnection(url, username, password);
-            System.out.println("✓ Database connected (" + env + ")");
+            conn.setAutoCommit(true);
+            System.out.println("✓ Database connected (" + env + ") with autocommit=true");
             return conn;
         } catch(Exception e) {
             System.err.println("✗ Database connection failed!");

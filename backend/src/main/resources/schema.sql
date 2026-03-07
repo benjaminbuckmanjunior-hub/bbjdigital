@@ -6,6 +6,9 @@ CREATE TABLE IF NOT EXISTS members(
     email VARCHAR(100) UNIQUE NOT NULL,
     actual_email VARCHAR(100),
     password VARCHAR(255) NOT NULL,
+    profile_picture_url VARCHAR(500),
+    is_profile_public BOOLEAN DEFAULT true,
+    bio TEXT,
     status VARCHAR(10) NOT NULL DEFAULT 'active',
     joined_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP

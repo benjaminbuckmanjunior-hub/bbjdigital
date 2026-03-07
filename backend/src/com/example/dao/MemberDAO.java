@@ -11,31 +11,45 @@ import org.springframework.stereotype.Repository;
 public class MemberDAO {
     
     public boolean addMember(Member member) {
-        String query = "INSERT INTO members (first_name, last_name, phone_number, email, actual_email, password, status, joined_date, updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        try (Connection conn = DBConnection.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(query)) {
-            stmt.setString(1, member.getFirstName());
-            stmt.setString(2, member.getLastName());
-            stmt.setString(3, member.getPhoneNumber());
-            stmt.setString(4, member.getEmail());
-            stmt.setString(5, member.getActualEmail());
-            stmt.setString(6, member.getPassword());
-            stmt.setString(7, member.getStatus() != null ? member.getStatus() : "active");
-            stmt.setObject(8, member.getJoinedDate() != null ? member.getJoinedDate() : java.time.LocalDateTime.now());
-            stmt.setObject(9, member.getUpdatedAt() != null ? member.getUpdatedAt() : java.time.LocalDateTime.now());
+        String query = "INSERT INTO members (first_name, last_name, phone_number, email, actual_email, password, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        Connection conn = null;
+        try {
+            conn = DBConnection.getConnection();
+            if (conn == null) {
+                throw new RuntimeException("Failed to get database connection");
+            }
+            conn.setAutoCommit(true);
             
-            System.out.println("MemberDAO: Executing INSERT for email: " + member.getEmail());
-            System.out.println("MemberDAO: firstName=" + member.getFirstName() + ", lastName=" + member.getLastName() + 
-                               ", phoneNumber=" + member.getPhoneNumber() + ", actualEmail=" + member.getActualEmail() + ", status=" + member.getStatus());
-            
-            int result = stmt.executeUpdate();
-            System.out.println("MemberDAO: Insert result = " + result + " rows affected for email: " + member.getEmail());
-            return result > 0;
+            try (PreparedStatement stmt = conn.prepareStatement(query)) {
+                stmt.setString(1, member.getFirstName());
+                stmt.setString(2, member.getLastName());
+                stmt.setString(3, member.getPhoneNumber());
+                stmt.setString(4, member.getEmail());
+                stmt.setString(5, member.getActualEmail());
+                stmt.setString(6, member.getPassword());
+                stmt.setString(7, "active");
+                
+                System.out.println("MemberDAO: Executing INSERT for email: " + member.getEmail());
+                System.out.println("MemberDAO: firstName=" + member.getFirstName() + ", lastName=" + member.getLastName() + 
+                                   ", phoneNumber=" + member.getPhoneNumber() + ", actualEmail=" + member.getActualEmail() + ", status=active");
+                
+                int result = stmt.executeUpdate();
+                System.out.println("MemberDAO: Insert result = " + result + " rows affected for email: " + member.getEmail());
+                return result > 0;
+            }
         } catch (SQLException e) {
             System.err.println("MemberDAO SQL Error: " + e.getMessage());
             System.err.println("MemberDAO SQL State: " + e.getSQLState() + ", Error Code: " + e.getErrorCode());
             e.printStackTrace();
             throw new RuntimeException("Database error: " + e.getSQLState() + " - " + e.getMessage(), e);
+        } finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
     }
 
@@ -54,6 +68,9 @@ public class MemberDAO {
                 member.setEmail(rs.getString("email"));
                 member.setActualEmail(rs.getString("actual_email"));
                 member.setPassword(rs.getString("password"));
+                member.setProfilePictureUrl(rs.getString("profile_picture_url"));
+                member.setIsProfilePublic(rs.getBoolean("is_profile_public"));
+                member.setBio(rs.getString("bio"));
                 member.setStatus(rs.getString("status"));
                 return member;
             }
@@ -78,6 +95,9 @@ public class MemberDAO {
                 member.setEmail(rs.getString("email"));
                 member.setActualEmail(rs.getString("actual_email"));
                 member.setPassword(rs.getString("password"));
+                member.setProfilePictureUrl(rs.getString("profile_picture_url"));
+                member.setIsProfilePublic(rs.getBoolean("is_profile_public"));
+                member.setBio(rs.getString("bio"));
                 member.setStatus(rs.getString("status"));
                 return member;
             }
@@ -102,6 +122,9 @@ public class MemberDAO {
                 member.setEmail(rs.getString("email"));
                 member.setActualEmail(rs.getString("actual_email"));
                 member.setPassword(rs.getString("password"));
+                member.setProfilePictureUrl(rs.getString("profile_picture_url"));
+                member.setIsProfilePublic(rs.getBoolean("is_profile_public"));
+                member.setBio(rs.getString("bio"));
                 member.setStatus(rs.getString("status"));
                 members.add(member);
             }
@@ -112,7 +135,7 @@ public class MemberDAO {
     }
 
     public boolean updateMember(Member member) {
-        String query = "UPDATE members SET first_name = ?, last_name = ?, phone_number = ?, email = ?, actual_email = ?, password = ?, status = ? WHERE id = ?";
+        String query = "UPDATE members SET first_name = ?, last_name = ?, phone_number = ?, email = ?, actual_email = ?, password = ?, profile_picture_url = ?, is_profile_public = ?, bio = ?, status = ? WHERE id = ?";
         try (Connection conn = DBConnection.getConnection();
              PreparedStatement stmt = conn.prepareStatement(query)) {
             stmt.setString(1, member.getFirstName());
@@ -121,8 +144,11 @@ public class MemberDAO {
             stmt.setString(4, member.getEmail());
             stmt.setString(5, member.getActualEmail());
             stmt.setString(6, member.getPassword());
-            stmt.setString(7, member.getStatus());
-            stmt.setInt(8, member.getId());
+            stmt.setString(7, member.getProfilePictureUrl());
+            stmt.setBoolean(8, member.getIsProfilePublic());
+            stmt.setString(9, member.getBio());
+            stmt.setString(10, member.getStatus());
+            stmt.setInt(11, member.getId());
             return stmt.executeUpdate() > 0;
         } catch (SQLException e) {
             e.printStackTrace();
