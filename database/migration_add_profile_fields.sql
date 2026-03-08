@@ -15,9 +15,13 @@ ADD COLUMN IF NOT EXISTS bio TEXT;
 ALTER TABLE members 
 MODIFY joined_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
 
--- 4. Ensure is_profile_public has correct default
+-- 4. Fix updated_at column (ensure it has proper default and auto-update)
+ALTER TABLE members 
+MODIFY updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP;
+
+-- 5. Ensure is_profile_public has correct default
 ALTER TABLE members 
 MODIFY is_profile_public BOOLEAN NOT NULL DEFAULT TRUE;
 
--- 5. Verify the table structure
+-- 6. Verify the table structure
 DESCRIBE members;
