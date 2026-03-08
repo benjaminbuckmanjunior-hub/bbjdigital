@@ -20,18 +20,25 @@ export default function Announcements() {
 
     return (
         <Layout>
-            <div className="max-w-4xl mx-auto">
+            <div className="max-w-4xl mx-auto py-8">
                 <h1 className="text-4xl font-bold mb-2 text-tealDeep">📢 Church Announcements</h1>
                 <p className="text-gray-600 mb-8">Latest news and updates from BBJ Church</p>
-                <div className="space-y-4">
-                    {announcements.map((announcement, index) => (
-                        <div key={announcement.id || index} className="bg-white p-6 rounded-lg border-l-4 border-lemon shadow-md hover:shadow-lg transition">
-                            <h3 className="text-2xl font-semibold text-tealDeep mb-3">{announcement.title}</h3>
-                            <p className="text-gray-700">{announcement.message}</p>
-                            <p className="text-sm text-gray-500 mt-4">{new Date(announcement.createdAt).toLocaleDateString()}</p>
-                        </div>
-                    ))}
-                </div>
+                {announcements.length === 0 ? (
+                    <div className="bg-yellow-50 border-l-4 border-lemon p-8 rounded-lg text-center">
+                        <p className="text-gray-600 text-lg">No announcements yet.</p>
+                        <p className="text-gray-500 mt-2">Check back soon for updates from the church!</p>
+                    </div>
+                ) : (
+                    <div className="space-y-4">
+                        {announcements.map((announcement, index) => (
+                            <div key={announcement.id || index} className="bg-white p-6 rounded-lg border-l-4 border-lemon shadow-md hover:shadow-lg transition">
+                                <h3 className="text-2xl font-semibold text-tealDeep mb-3">{announcement.title}</h3>
+                                <p className="text-gray-700">{announcement.message}</p>
+                                <p className="text-sm text-gray-500 mt-4">{new Date(announcement.createdAt).toLocaleDateString()}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </Layout>
     );
