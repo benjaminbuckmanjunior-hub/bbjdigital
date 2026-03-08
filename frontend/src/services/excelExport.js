@@ -1,53 +1,56 @@
-// Export members data to Excel file
+import * as XLSX from 'xlsx';
+
+// Export members data to Excel file (.xlsx format)
 export function downloadMembersAsExcel(members) {
     if (!members || members.length === 0) {
         alert('No members to export');
         return;
     }
 
-    // Create CSV content
-    const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Actual Email', 'Phone', 'Status', 'Joined Date'];
-    const rows = members.map(m => [
-        m.id,
-        m.firstName,
-        m.lastName,
-        m.email,
-        m.actualEmail,
-        m.phoneNumber,
-        m.status,
-        m.joinedDate ? new Date(m.joinedDate).toLocaleDateString() : ''
-    ]);
-
-    // Create CSV content
-    let csv = headers.join(',') + '\n';
-    rows.forEach(row => {
-        csv += row.map(cell => `"${cell || ''}"`).join(',') + '\n';
-    });
-
-    // Create blob and download
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    const url = URL.createObjectURL(blob);
-    link.setAttribute('href', url);
-    link.setAttribute('download', `members_${new Date().toISOString().split('T')[0]}.csv`);
-    link.style.visibility = 'hidden';
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-}
-
-// Export to true Excel format (XLSX)
-export function downloadMembersAsXLSX(members) {
-    if (!members || members.length === 0) {
-        alert('No members to export');
-        return;
-    }
-
     try {
-        // Using a CSV format that Excel can read
-        downloadMembersAsExcel(members);
+        // Prepare data for Excel
+        const headers = ['ID', 'First Name', 'Last Name', 'Email', 'Actual Email', 'Phone', 'Status', 'Joined Date'];
+        const rows = members.map(m => [
+            m.id,
+            m.firstName,
+            m.lastName,
+            m.email,
+            m.actualEmail,
+            m.phoneNumber,
+            m.status,
+            m.joinedDate ? new Date(m.joinedDate).toLocaleDateString() : ''
+        ]);
+
+        // Create worksheet with headers and data
+        const worksheetData = [headers, ...rows];
+        const worksheet = XLSX.utils.aoa_to_sheet(worksheetData);
+
+        // Set column widths for better readability
+        worksheet['!cols'] = [
+            { wch: 8 },   // ID
+            { wch: 15 },  // First Name
+            { wch: 15 },  // Last Name
+            { wch: 20 },  // Email
+            { wch: 25 },  // Actual Email
+            { wch: 15 },  // Phone
+            { wch: 12 },  // Status
+            { wch: 15 }   // Joined Date
+        ];
+
+        // Create workbook and add worksheet
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook, worksheet, 'Members');
+
+        // Generate Excel file and download
+        const fileName = `members_${new Date().toISOString().split('T')[0]}.xlsx`;
+        XLSX.writeFile(workbook, fileName);
     } catch (error) {
         console.error('Export failed:', error);
         alert('Failed to export members');
     }
+}
+
+// Export to true Excel format (XLSX) - same as downloadMembersAsExcel
+export function downloadMembersAsXLSX(members) {
+    downloadMembersAsExcel(members);
 }
