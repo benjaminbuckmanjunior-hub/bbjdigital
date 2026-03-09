@@ -23,7 +23,6 @@ export default function AdminDashboard() {
 
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [theme, setTheme] = useState(() => localStorage.getItem('appTheme') || 'light');
     const [newAnnouncement, setNewAnnouncement] = useState({ title: '', message: '' });
     const [newEvent, setNewEvent] = useState({ title: '', description: '', eventDate: '', location: '', documentFile: null });
     const [newSermon, setNewSermon] = useState({ title: '', description: '', filePath: '', fileType: 'mp3' });
@@ -35,13 +34,6 @@ export default function AdminDashboard() {
     }, []);
 
     const isMobile = windowWidth < 768;
-
-    const toggleTheme = () => {
-        const newTheme = theme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-        localStorage.setItem('appTheme', newTheme);
-        document.documentElement.setAttribute('data-theme', newTheme);
-    };
 
     const handleLogout = () => {
         localStorage.clear();
@@ -212,15 +204,6 @@ export default function AdminDashboard() {
                             {mobileMenuOpen ? '✕' : '☰'}
                         </button>
 
-                        {/* Theme Toggle Button */}
-                        <button
-                            onClick={toggleTheme}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-2 sm:px-3 py-1 sm:py-2 text-xs sm:text-sm rounded-lg transition font-semibold"
-                            title="Toggle theme"
-                        >
-                            {theme === 'light' ? '🌙' : '☀️'}
-                        </button>
-                        
                         <button
                             onClick={handleLogout}
                             className="bg-red-500 hover:bg-red-600 text-white px-2 sm:px-4 py-1 sm:py-2 text-xs sm:text-sm md:text-base rounded-lg transition font-semibold flex-shrink-0"
