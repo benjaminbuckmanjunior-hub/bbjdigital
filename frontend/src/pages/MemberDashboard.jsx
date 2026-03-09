@@ -56,7 +56,7 @@ export default function MemberDashboard() {
                 const response = await fetch('/api/announcements');
                 if (response.ok) {
                     const data = await response.json();
-                    setAnnouncements((data.data || data).slice(0, 5));
+                    setAnnouncements(data.data || data);
                 }
             } catch (err) {
                 console.error('Error fetching announcements:', err);
@@ -69,7 +69,7 @@ export default function MemberDashboard() {
                 const response = await fetch('/api/events');
                 if (response.ok) {
                     const data = await response.json();
-                    setEvents((data.data || data).slice(0, 5));
+                    setEvents(data.data || data);
                 }
             } catch (err) {
                 console.error('Error fetching events:', err);
@@ -82,7 +82,7 @@ export default function MemberDashboard() {
                 const response = await fetch('/api/sermons');
                 if (response.ok) {
                     const data = await response.json();
-                    setSermons((data.data || data).slice(0, 5));
+                    setSermons(data.data || data);
                 }
             } catch (err) {
                 console.error('Error fetching sermons:', err);
@@ -184,32 +184,32 @@ export default function MemberDashboard() {
 
                         {/* Quick Links with Counts */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
-                            <a
-                                href="/announcements"
+                            <button
+                                onClick={() => setActiveTab('announcements')}
                                 className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 hover:shadow-xl transition border-t-4 border-lemon cursor-pointer flex flex-col items-center justify-center"
                             >
                                 <div className="text-4xl sm:text-5xl mb-2 sm:mb-3">📣</div>
                                 <p className="text-3xl sm:text-4xl font-bold text-tealDeep mb-1">{announcements.length}</p>
                                 <p className="text-xs sm:text-sm text-gray-600 text-center">Announcements</p>
-                            </a>
+                            </button>
 
-                            <a
-                                href="/events"
+                            <button
+                                onClick={() => setActiveTab('events')}
                                 className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 hover:shadow-xl transition border-t-4 border-lemon cursor-pointer flex flex-col items-center justify-center"
                             >
                                 <div className="text-4xl sm:text-5xl mb-2 sm:mb-3">📅</div>
                                 <p className="text-3xl sm:text-4xl font-bold text-tealDeep mb-1">{events.length}</p>
                                 <p className="text-xs sm:text-sm text-gray-600 text-center">Events</p>
-                            </a>
+                            </button>
 
-                            <a
-                                href="/sermons"
+                            <button
+                                onClick={() => setActiveTab('sermons')}
                                 className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 hover:shadow-xl transition border-t-4 border-lemon cursor-pointer flex flex-col items-center justify-center"
                             >
                                 <div className="text-4xl sm:text-5xl mb-2 sm:mb-3">🎙️</div>
                                 <p className="text-3xl sm:text-4xl font-bold text-tealDeep mb-1">{sermons.length}</p>
                                 <p className="text-xs sm:text-sm text-gray-600 text-center">Sermons</p>
-                            </a>
+                            </button>
                         </div>
 
 
