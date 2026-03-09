@@ -23,9 +23,9 @@ export default function AdminDashboard() {
 
     const [windowWidth, setWindowWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 0);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-    const [newAnnouncement, setNewAnnouncement] = useState({ title: '', message: '' });
+    const [newAnnouncement, setNewAnnouncement] = useState({ title: '', message: '', file: null });
     const [newEvent, setNewEvent] = useState({ title: '', description: '', eventDate: '', location: '', documentFile: null });
-    const [newSermon, setNewSermon] = useState({ title: '', description: '', filePath: '', fileType: 'mp3' });
+    const [newSermon, setNewSermon] = useState({ title: '', description: '', speaker: '', sermonDate: '', file: null, fileType: 'mp3' });
 
     useEffect(() => {
         const handleResize = () => setWindowWidth(window.innerWidth);
@@ -84,11 +84,35 @@ export default function AdminDashboard() {
     // Announcement Management
     const handleAddAnnouncement = async () => {
         try {
-            await createAnnouncement({ ...newAnnouncement, createdBy: adminId });
-            setNewAnnouncement({ title: '', message: '' });
+            let announcementData = { ...newAnnouncement, createdBy: adminId };
+            
+            // Upload file if provided
+            if (newAnnouncement.file) {
+                const formData = new FormData();
+                formData.append('file', newAnnouncement.file);
+                
+                try {
+                    const fileResponse = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (fileResponse.ok) {
+                        const fileData = await fileResponse.json();
+                        announcementData.fileUrl = fileData.fileUrl || fileData.url;
+                    }
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                    alert('File upload failed, but announcement will be created');
+                }
+            }
+            
+            await createAnnouncement(announcementData);
+            setNewAnnouncement({ title: '', message: '', file: null });
             await fetchAllData();
         } catch (error) {
             console.error('Error adding announcement:', error);
+            alert('Error creating announcement: ' + error.message);
         }
     };
 
@@ -148,11 +172,35 @@ export default function AdminDashboard() {
     // Sermon Management
     const handleAddSermon = async () => {
         try {
-            await uploadSermon({ ...newSermon, uploadedBy: adminId });
-            setNewSermon({ title: '', description: '', filePath: '', fileType: 'mp3' });
+            let sermonData = { ...newSermon, createdBy: adminId };
+            
+            // Upload file if provided
+            if (newSermon.file) {
+                const formData = new FormData();
+                formData.append('file', newSermon.file);
+                
+                try {
+                    const fileResponse = await fetch('/api/upload', {
+                        method: 'POST',
+                        body: formData
+                    });
+                    
+                    if (fileResponse.ok) {
+                        const fileData = await fileResponse.json();
+                        sermonData.fileUrl = fileData.fileUrl || fileData.url;
+                    }
+                } catch (error) {
+                    console.error('Error uploading file:', error);
+                    alert('File upload failed, but sermon will be created');
+                }
+            }
+            
+            await uploadSermon(sermonData);
+            setNewSermon({ title: '', description: '', speaker: '', sermonDate: '', file: null, fileType: 'mp3' });
             await fetchAllData();
         } catch (error) {
             console.error('Error adding sermon:', error);
+            alert('Error creating sermon: ' + error.message);
         }
     };
 
@@ -283,6 +331,17 @@ export default function AdminDashboard() {
                             onChange={(e) => setNewAnnouncement({ ...newAnnouncement, message: e.target.value })}
                             className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep h-24 sm:h-32 text-sm sm:text-base"
                         />
+                        <div>
+                            <label className="block text-sm font-semibold text-tealDeep mb-2">Upload File (Optional)</label>
+                            <input
+                                type="file"
+                                onChange={(e) => setNewAnnouncement({ ...newAnnouncement, file: e.target.files[0] })}
+                                className="w-full border-2 border-lemon p-2 sm:p-3 rounded text-sm sm:text-base"
+                            />
+                            {newAnnouncement.file && (
+                                <p className="text-sm text-gray-600 mt-1">Selected: {newAnnouncement.file.name}</p>
+                            )}
+                        </div>
                         <button
                             onClick={handleAddAnnouncement}
                             className="w-full sm:w-auto bg-tealDeep text-white px-4 sm:px-6 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm sm:text-base"
@@ -401,6 +460,19 @@ export default function AdminDashboard() {
                             onChange={(e) => setNewSermon({ ...newSermon, description: e.target.value })}
                             className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep h-20 sm:h-24 text-sm sm:text-base"
                         />
+                        <input
+                            type="text"
+                            placeholder="Sermon Speaker"
+                            value={newSermon.speaker}
+                            onChange={(e) => setNewSermon({ ...newSermon, speaker: e.target.value })}
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
+                        />
+                        <input
+                            type="date"
+                            value={newSermon.sermonDate}
+                            onChange={(e) => setNewSermon({ ...newSermon, sermonDate: e.target.value })}
+                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
+                        />
                         <select
                             value={newSermon.fileType}
                             onChange={(e) => setNewSermon({ ...newSermon, fileType: e.target.value })}
@@ -409,13 +481,18 @@ export default function AdminDashboard() {
                             <option value="mp3">Audio (MP3)</option>
                             <option value="mp4">Video (MP4)</option>
                         </select>
-                        <input
-                            type="text"
-                            placeholder="File URL or Path"
-                            value={newSermon.filePath}
-                            onChange={(e) => setNewSermon({ ...newSermon, filePath: e.target.value })}
-                            className="w-full border-2 border-lemon p-2 sm:p-3 rounded focus:outline-none focus:border-tealDeep text-sm sm:text-base"
-                        />
+                        <div>
+                            <label className="block text-sm font-semibold text-tealDeep mb-2">Upload Sermon File</label>
+                            <input
+                                type="file"
+                                accept="audio/*,video/*"
+                                onChange={(e) => setNewSermon({ ...newSermon, file: e.target.files[0] })}
+                                className="w-full border-2 border-lemon p-2 sm:p-3 rounded text-sm sm:text-base"
+                            />
+                            {newSermon.file && (
+                                <p className="text-sm text-gray-600 mt-1">Selected: {newSermon.file.name}</p>
+                            )}
+                        </div>
                         <button
                             onClick={handleAddSermon}
                             className="w-full sm:w-auto bg-tealDeep text-white px-4 sm:px-6 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm sm:text-base"
