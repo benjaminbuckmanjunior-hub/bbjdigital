@@ -43,6 +43,17 @@ export default function Events() {
                                     <span className="font-semibold text-tealDeep">📍 Location:</span> {event.eventLocation}
                                 </p>
                                 <p className="text-gray-700">{event.eventDescription}</p>
+                                {event.documentUrl && (
+                                    <div className="mt-4 pt-4 border-t border-gray-200">
+                                        <a
+                                            href={event.documentUrl}
+                                            download
+                                            className="inline-block bg-tealDeep text-white px-4 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm"
+                                        >
+                                            📥 Download Document
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>

@@ -41,19 +41,33 @@ export default function Sermons() {
                                     <span className="font-semibold text-tealDeep">📅 Date:</span> {new Date(sermon.sermonDate).toLocaleDateString()}
                                 </p>
                                 {sermon.audioUrl && (
-                                    <div className="mb-3">
+                                    <div className="mb-4">
                                         <audio controls className="w-full" style={{accentColor: '#0F766E'}}>
                                             <source src={sermon.audioUrl} type="audio/mpeg" />
                                             Your browser does not support the audio element.
                                         </audio>
+                                        <a
+                                            href={sermon.audioUrl}
+                                            download
+                                            className="inline-block mt-2 bg-tealDeep text-white px-4 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm"
+                                        >
+                                            📥 Download Audio
+                                        </a>
                                     </div>
                                 )}
                                 {sermon.videoUrl && (
-                                    <div className="mb-3">
+                                    <div className="mb-4">
                                         <video controls className="w-full max-h-48">
                                             <source src={sermon.videoUrl} type="video/mp4" />
                                             Your browser does not support the video element.
                                         </video>
+                                        <a
+                                            href={sermon.videoUrl}
+                                            download
+                                            className="inline-block mt-2 bg-tealDeep text-white px-4 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm"
+                                        >
+                                            📥 Download Video
+                                        </a>
                                     </div>
                                 )}
                             </div>

@@ -4,7 +4,7 @@ import {
     getMembers, deleteMember,
     getAnnouncements, createAnnouncement, updateAnnouncement, deleteAnnouncement,
     getEvents, createEvent, updateEvent, deleteEvent,
-    getSermons, uploadSermon, deleteSermon,
+    getSermons, createSermon, deleteSermon,
     uploadEventDocument
 } from '../services/api';
 import { downloadMembersAsExcel } from '../services/excelExport';
@@ -172,12 +172,20 @@ export default function AdminDashboard() {
     // Sermon Management
     const handleAddSermon = async () => {
         try {
-            let sermonData = { ...newSermon, createdBy: adminId };
+            let sermonData = { 
+                title: newSermon.title,
+                description: newSermon.description,
+                speaker: newSermon.speaker,
+                sermonDate: newSermon.sermonDate,
+                fileType: newSermon.fileType,
+                createdBy: adminId
+            };
             
             // Upload file if provided
             if (newSermon.file) {
                 const formData = new FormData();
                 formData.append('file', newSermon.file);
+                formData.append('fileType', newSermon.fileType);
                 
                 try {
                     const fileResponse = await fetch('/api/upload', {
@@ -187,7 +195,11 @@ export default function AdminDashboard() {
                     
                     if (fileResponse.ok) {
                         const fileData = await fileResponse.json();
-                        sermonData.fileUrl = fileData.fileUrl || fileData.url;
+                        if (newSermon.fileType === 'mp3') {
+                            sermonData.audioUrl = fileData.fileUrl || fileData.url;
+                        } else {
+                            sermonData.videoUrl = fileData.fileUrl || fileData.url;
+                        }
                     }
                 } catch (error) {
                     console.error('Error uploading file:', error);
@@ -195,7 +207,7 @@ export default function AdminDashboard() {
                 }
             }
             
-            await uploadSermon(sermonData);
+            await createSermon(sermonData);
             setNewSermon({ title: '', description: '', speaker: '', sermonDate: '', file: null, fileType: 'mp3' });
             await fetchAllData();
         } catch (error) {

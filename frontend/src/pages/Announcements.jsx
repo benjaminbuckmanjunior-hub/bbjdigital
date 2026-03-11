@@ -35,6 +35,17 @@ export default function Announcements() {
                                 <h3 className="text-2xl font-semibold text-tealDeep mb-3">{announcement.title}</h3>
                                 <p className="text-gray-700">{announcement.message}</p>
                                 <p className="text-sm text-gray-500 mt-4">{new Date(announcement.createdAt).toLocaleDateString()}</p>
+                                {announcement.fileUrl && (
+                                    <div className="mt-4 pt-4 border-t border-gray-200">
+                                        <a
+                                            href={announcement.fileUrl}
+                                            download
+                                            className="inline-block bg-tealDeep text-white px-4 py-2 rounded font-semibold hover:bg-teal-700 transition text-sm"
+                                        >
+                                            📥 Download File
+                                        </a>
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>

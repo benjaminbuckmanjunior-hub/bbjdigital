@@ -120,6 +120,10 @@ export const getSermonById = (id) => {
   return api.get(`/sermons/${id}`);
 };
 
+export const createSermon = (sermon) => {
+  return api.post('/sermons', sermon);
+};
+
 // File upload with multipart form data
 export const uploadSermon = (formData) => {
   return api.post('/sermons/upload', formData, {
