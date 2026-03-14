@@ -6,6 +6,22 @@ export default function Layout({ children }) {
     const [lastActivity, setLastActivity] = useState(Date.now());
     const inactivityTimeout = 10 * 60 * 1000; // 10 minutes
 
+    // Check for new tab/window logout
+    useEffect(() => {
+        const sessionId = localStorage.getItem('sessionId');
+        const storedSessionId = sessionStorage.getItem('sessionId');
+        
+        if (sessionId && !storedSessionId) {
+            // This is a new tab/window, logout
+            localStorage.clear();
+            sessionStorage.clear();
+            window.location.href = '/login';
+        } else if (sessionId) {
+            // Store in sessionStorage to track this tab
+            sessionStorage.setItem('sessionId', sessionId);
+        }
+    }, []);
+
     useEffect(() => {
         const handleResize = () => setIsMobile(window.innerWidth < 768);
         window.addEventListener('resize', handleResize);

@@ -15,6 +15,7 @@ export default function Register() {
     const [error, setError] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (e) => {
@@ -26,12 +27,18 @@ export default function Register() {
         e.preventDefault();
         setError('');
         
+        // Prevent double submission
+        if (isSubmitting) {
+            return;
+        }
+
         if (formData.password !== formData.confirmPassword) {
             setError('Passwords do not match');
             return;
         }
 
         try {
+            setIsSubmitting(true);
             // send the form data
             const response = await register(formData);
             if (response.data?.success) {
@@ -43,6 +50,7 @@ export default function Register() {
                     localStorage.setItem('userId', response.data.userId);
                     localStorage.setItem('userType', 'member');
                     localStorage.setItem('userName', `${formData.firstName} ${formData.lastName}`);
+                    localStorage.setItem('sessionId', Date.now().toString()); // Add unique session ID
                     localStorage.setItem('isNewMember', 'true');
                 }
                 alert(`WELCOME TO ECCLESIASYS CHURCH MANAGEMENT SYSTEM. YOUR LOGIN EMAIL IS "${generatedEmail}" USE THIS ANYTIME LOGGING IN`);
@@ -55,6 +63,8 @@ export default function Register() {
             console.error('Registration error', err);
             const msg = err.response?.data?.message || err.message || 'Network error';
             setError(msg);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -180,9 +190,10 @@ export default function Register() {
 
                             <button 
                                 type="submit"
-                                className="w-full bg-lemon text-tealDeep font-bold py-3 rounded-lg hover:bg-yellow-400 transition shadow-lg mt-6"
+                                disabled={isSubmitting}
+                                className="w-full bg-lemon text-tealDeep font-bold py-3 rounded-lg hover:bg-yellow-400 transition shadow-lg mt-6 disabled:opacity-50 disabled:cursor-not-allowed"
                             >
-                                Create Account
+                                {isSubmitting ? 'Creating Account...' : 'Create Account'}
                             </button>
                         </form>
 

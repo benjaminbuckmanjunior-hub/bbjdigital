@@ -176,11 +176,17 @@ export default function AdminDashboard() {
 
     // Sermon Management
     const handleAddSermon = async () => {
+        // Validate required fields
+        if (!newSermon.title.trim() || !newSermon.speaker.trim() || !newSermon.sermonDate.trim()) {
+            alert('Please fill in Title, Speaker, and Date fields');
+            return;
+        }
+
         try {
             let sermonData = { 
-                title: newSermon.title,
-                description: newSermon.description,
-                speaker: newSermon.speaker,
+                title: newSermon.title.trim(),
+                description: newSermon.description.trim(),
+                speaker: newSermon.speaker.trim(),
                 sermonDate: newSermon.sermonDate,
                 fileType: newSermon.fileType,
                 createdBy: adminId
@@ -205,6 +211,9 @@ export default function AdminDashboard() {
                         } else {
                             sermonData.videoUrl = fileData.fileUrl || fileData.url;
                         }
+                    } else {
+                        console.warn('File upload returned status:', fileResponse.status);
+                        alert('File upload failed, but sermon will be created');
                     }
                 } catch (error) {
                     console.error('Error uploading file:', error);
@@ -212,9 +221,17 @@ export default function AdminDashboard() {
                 }
             }
             
-            await createSermon(sermonData);
-            setNewSermon({ title: '', description: '', speaker: '', sermonDate: '', file: null, fileType: 'mp3' });
-            await fetchAllData();
+            console.log('Creating sermon with data:', sermonData);
+            const response = await createSermon(sermonData);
+            console.log('Sermon response:', response);
+            
+            if (response.data?.success || response.data?.data?.id) {
+                setNewSermon({ title: '', description: '', speaker: '', sermonDate: '', file: null, fileType: 'mp3' });
+                alert('Sermon created successfully!');
+                await fetchAllData();
+            } else {
+                alert('Error creating sermon: ' + (response.data?.message || 'Unknown error'));
+            }
         } catch (error) {
             console.error('Error adding sermon:', error);
             alert('Error creating sermon: ' + error.message);
