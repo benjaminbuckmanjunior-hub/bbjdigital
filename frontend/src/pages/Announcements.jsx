@@ -22,7 +22,7 @@ export default function Announcements() {
         <Layout>
             <div className="max-w-4xl mx-auto py-8">
                 <h1 className="text-4xl font-bold mb-2 text-tealDeep">📢 Church Announcements</h1>
-                <p className="text-gray-600 mb-8">Latest news and updates from BBJ Church</p>
+                <p className="text-gray-600 mb-8">Latest news and updates from EcclesiaSys Church</p>
                 {announcements.length === 0 ? (
                     <div className="bg-yellow-50 border-l-4 border-lemon p-8 rounded-lg text-center">
                         <p className="text-gray-600 text-lg">No announcements yet.</p>

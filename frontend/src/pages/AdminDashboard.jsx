@@ -10,7 +10,7 @@ import {
 import { downloadMembersAsExcel } from '../services/excelExport';
 
 export default function AdminDashboard() {
-    const [activeTab, setActiveTab] = useState('members');
+    const [activeTab, setActiveTab] = useState(() => localStorage.getItem('adminActiveTab') || 'members');
     const [members, setMembers] = useState([]);
     const [announcements, setAnnouncements] = useState([]);
     const [events, setEvents] = useState([]);
@@ -231,6 +231,7 @@ export default function AdminDashboard() {
         <button
             onClick={() => {
                 setActiveTab(tab);
+                localStorage.setItem('adminActiveTab', tab);
                 setMobileMenuOpen(false);
             }}
             className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold transition whitespace-nowrap ${
@@ -303,7 +304,7 @@ export default function AdminDashboard() {
                             onClick={() => downloadMembersAsExcel(members)}
                             className="bg-green-500 hover:bg-green-600 text-white px-3 sm:px-6 py-2 rounded font-semibold transition text-sm sm:text-base whitespace-nowrap"
                         >
-                            📥 Export to CSV
+                            📥 Export to Excel
                         </button>
                     </div>
                     <div className="grid grid-cols-1 gap-4">

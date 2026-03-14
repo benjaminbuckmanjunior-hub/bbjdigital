@@ -4,7 +4,7 @@ import MemberProfile from './MemberProfile';
 
 export default function MemberDashboard() {
     const navigate = useNavigate();
-    const [activeTab, setActiveTab] = useState('home');
+    const [activeTab, setActiveTab] = useState(() => localStorage.getItem('memberActiveTab') || 'home');
     const [memberData, setMemberData] = useState(null);
     const [announcements, setAnnouncements] = useState([]);
     const [events, setEvents] = useState([]);
@@ -108,6 +108,7 @@ export default function MemberDashboard() {
         <button
             onClick={() => {
                 setActiveTab(tab);
+                localStorage.setItem('memberActiveTab', tab);
                 setMobileMenuOpen(false);
             }}
             className={`px-3 sm:px-4 md:px-6 py-2 sm:py-3 text-sm sm:text-base font-semibold transition whitespace-nowrap ${
@@ -175,7 +176,7 @@ export default function MemberDashboard() {
                         {/* Welcome Section */}
                         <div className="mb-2 sm:mb-4">
                             <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep mb-1 sm:mb-2">
-                                {isNewMember ? '🎉 Welcome to BBJ Digital Church!' : 'Welcome back!'}
+                                {isNewMember ? '🎉 Welcome to EcclesiaSys Church!' : 'Welcome back!'}
                             </h2>
                             <p className="text-sm sm:text-base text-gray-600">
                                 {isNewMember ? 'Thank you for joining our church community! Explore the portal to stay connected.' : 'Welcome to your church community portal'}
@@ -185,7 +186,10 @@ export default function MemberDashboard() {
                         {/* Quick Links with Counts */}
                         <div className="grid grid-cols-1 md:grid-cols-3 gap-3 sm:gap-4 md:gap-6 mb-6 sm:mb-8">
                             <button
-                                onClick={() => setActiveTab('announcements')}
+                                onClick={() => {
+                                    setActiveTab('announcements');
+                                    localStorage.setItem('memberActiveTab', 'announcements');
+                                }}
                                 className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 hover:shadow-xl transition border-t-4 border-lemon cursor-pointer flex flex-col items-center justify-center"
                             >
                                 <div className="text-4xl sm:text-5xl mb-2 sm:mb-3">📣</div>
@@ -194,7 +198,10 @@ export default function MemberDashboard() {
                             </button>
 
                             <button
-                                onClick={() => setActiveTab('events')}
+                                onClick={() => {
+                                    setActiveTab('events');
+                                    localStorage.setItem('memberActiveTab', 'events');
+                                }}
                                 className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 hover:shadow-xl transition border-t-4 border-lemon cursor-pointer flex flex-col items-center justify-center"
                             >
                                 <div className="text-4xl sm:text-5xl mb-2 sm:mb-3">📅</div>
@@ -203,7 +210,10 @@ export default function MemberDashboard() {
                             </button>
 
                             <button
-                                onClick={() => setActiveTab('sermons')}
+                                onClick={() => {
+                                    setActiveTab('sermons');
+                                    localStorage.setItem('memberActiveTab', 'sermons');
+                                }}
                                 className="bg-white rounded-lg shadow-lg p-3 sm:p-4 md:p-6 hover:shadow-xl transition border-t-4 border-lemon cursor-pointer flex flex-col items-center justify-center"
                             >
                                 <div className="text-4xl sm:text-5xl mb-2 sm:mb-3">🎙️</div>

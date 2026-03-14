@@ -39,7 +39,7 @@ export default function Navbar({ isMobile }) {
       <div className="max-w-7xl mx-auto px-4 md:px-6 py-4">
         <div className="flex justify-between items-center">
           <Link to="/" className="text-xl md:text-2xl font-bold hover:text-lemon transition">
-            BBJ Digital
+            EcclesiaSys
           </Link>
 
           {/* Desktop Navigation */}

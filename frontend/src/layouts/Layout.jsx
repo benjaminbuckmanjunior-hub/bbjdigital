@@ -20,7 +20,7 @@ export default function Layout({ children }) {
             </main>
             <footer className="mt-12 bg-tealDeep text-white py-8">
                 <div className="container mx-auto px-4 text-center">
-                    <p>&copy; 2026 BBJ Digital Church Management System. All rights reserved.</p>
+                    <p>&copy; 2026 EcclesiaSys Church Management System. All rights reserved.</p>
                 </div>
             </footer>
         </div>

@@ -43,7 +43,7 @@ export default function Register() {
                     localStorage.setItem('userName', `${formData.firstName} ${formData.lastName}`);
                     localStorage.setItem('isNewMember', 'true');
                 }
-                alert(`WELCOME TO BBJ DIGITAL CHURCH MANAGEMENT SYSTEM. YOUR LOGIN EMAIL IS "${generatedEmail}" USE THIS ANYTIME LOGGING IN`);
+                alert(`WELCOME TO ECCLESIASYS CHURCH MANAGEMENT SYSTEM. YOUR LOGIN EMAIL IS "${generatedEmail}" USE THIS ANYTIME LOGGING IN`);
                 // navigate to member dashboard
                 navigate('/member-dashboard');
             } else {
@@ -65,7 +65,7 @@ export default function Register() {
                         <div className="h-16 w-16 bg-lemon rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg">
                             <span className="text-3xl font-bold text-tealDeep">+</span>
                         </div>
-                        <h1 className="text-4xl font-bold text-tealDeep mb-2">Join BBJ Digital Church Management System</h1>
+                        <h1 className="text-4xl font-bold text-tealDeep mb-2">Join EcclesiaSys Church Management System</h1>
                         <p className="text-gray-600">Create your member account</p>
                     </div>
 
