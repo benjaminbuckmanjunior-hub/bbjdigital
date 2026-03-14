@@ -175,10 +175,10 @@ export default function MemberDashboard() {
                     <div className="space-y-4 sm:space-y-6">
                         {/* Welcome Section */}
                         <div className="mb-2 sm:mb-4">
-                            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-tealDeep mb-1 sm:mb-2">
-                                {isNewMember ? '🎉 Welcome to EcclesiaSys Church!' : 'Welcome back!'}
+                            <h2 className="text-xl sm:text-2xl md:text-3xl font-bold text-lemon mb-1 sm:mb-2">
+                                {isNewMember ? '🎉 Welcome to EcclesiaSys' : 'Welcome back!'}
                             </h2>
-                            <p className="text-sm sm:text-base text-gray-600">
+                            <p className="text-sm sm:text-base text-white">
                                 {isNewMember ? 'Thank you for joining our church community! Explore the portal to stay connected.' : 'Welcome to your church community portal'}
                             </p>
                         </div>
